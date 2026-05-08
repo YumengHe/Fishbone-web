@@ -4,9 +4,14 @@
  */
 
 class ImageComparisonSlider {
-  constructor(containerId) {
-    this.container = document.getElementById(containerId);
+  constructor(containerOrId) {
+    this.container = (typeof containerOrId === 'string')
+        ? document.getElementById(containerOrId)
+        : containerOrId;
     if (!this.container) return;
+    // Make the instance reachable from the DOM so peers (e.g. carousel clones)
+    // can sync state.
+    this.container.__sliderInstance = this;
 
     this.slider = null;
     this.handle1 = null;  // Left handle
@@ -31,11 +36,18 @@ class ImageComparisonSlider {
     this.divider1 = this.container.querySelector('.comparison-slider-divider-1');
     this.divider2 = this.container.querySelector('.comparison-slider-divider-2');
 
-    if (!this.slider || !this.handle1 || !this.handle2) return;
+    if (!this.slider || !this.handle1) return;
 
-    // Attach events to both handles
+    // 2-image mode: no second handle/divider/depth layer
+    this.twoImageMode = !this.handle2;
+    if (this.twoImageMode) {
+      this.slider1Position = 0.5;
+      this.slider2Position = 1;
+    }
+
+    // Attach events to handles
     this.attachHandleEvents(this.handle1, 1);
-    this.attachHandleEvents(this.handle2, 2);
+    if (this.handle2) this.attachHandleEvents(this.handle2, 2);
 
     // Click on slider to move nearest handle
     this.slider.addEventListener('click', (e) => this.handleClick(e));
@@ -101,6 +113,7 @@ class ImageComparisonSlider {
     }
 
     this.updateAllLayers();
+    this._notifyChange();
   }
 
   endDrag() {
@@ -135,6 +148,13 @@ class ImageComparisonSlider {
     const clickX = e.clientX - rect.left;
     const clickPosition = clickX / rect.width;
 
+    if (this.twoImageMode) {
+      this.slider1Position = clickPosition;
+      this.updateAllLayers();
+      this._notifyChange();
+      return;
+    }
+
     // Determine which handle is closer to click position
     const dist1 = Math.abs(clickPosition - this.slider1Position);
     const dist2 = Math.abs(clickPosition - this.slider2Position);
@@ -148,6 +168,7 @@ class ImageComparisonSlider {
     }
 
     this.updateAllLayers();
+    this._notifyChange();
   }
 
   updateAllLayers() {
@@ -199,6 +220,24 @@ class ImageComparisonSlider {
     }
   }
 
+  // Programmatically set positions without dispatching the change event.
+  // Used by carousel sync to mirror state across cloned slider instances.
+  setPosition(p1, p2) {
+    if (typeof p1 === 'number') this.slider1Position = p1;
+    if (typeof p2 === 'number' && this.handle2) this.slider2Position = p2;
+    this.updateAllLayers();
+  }
+
+  _notifyChange() {
+    this.container.dispatchEvent(new CustomEvent('slider:position', {
+      detail: {
+        slider1Position: this.slider1Position,
+        slider2Position: this.slider2Position,
+      },
+      bubbles: true,
+    }));
+  }
+
   updateLabelPositions() {
     const leftLabel = this.slider.querySelector('.comparison-label-left');
     const middleLabel = this.slider.querySelector('.comparison-label-middle');
@@ -221,8 +260,9 @@ class ImageComparisonSlider {
     }
 
     if (rightLabel) {
-      // Right label: center of region from slider2Position to 100%
-      const centerPos = ((this.slider2Position + 1) / 2) * 100;
+      // Right label: center of region from slider2Position (or slider1Position in 2-image mode) to 100%
+      const rightStart = this.twoImageMode ? this.slider1Position : this.slider2Position;
+      const centerPos = ((rightStart + 1) / 2) * 100;
       rightLabel.style.left = centerPos + '%';
       rightLabel.style.transform = 'translateX(-50%)';
       rightLabel.style.right = 'auto';
