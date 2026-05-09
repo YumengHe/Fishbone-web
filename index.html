@@ -223,6 +223,18 @@
     </div>
   </section>
 
+  <!-- Ablation: Branching Section -->
+  <section class="section">
+    <div class="container">
+      <h2 class="title is-3" style="text-align:center;">♣️ Ablation: Branching ♣️</h2>
+      <p style="text-align:center; margin-bottom: 1.5rem;">
+        Effect of the branching design on the spine structure. Each row compares the spine
+        produced <strong>without branching</strong> against our full method <strong>with branching</strong>.
+      </p>
+      <div id="ablation-branch-items"></div>
+    </div>
+  </section>
+
 
 
 <style>
@@ -602,6 +614,59 @@
       .editing-row > .editing-cell:nth-child(n+5),
       .editing-header-row > div:nth-child(n+5) {
           display: none;
+      }
+  }
+
+  /* Ablation Branching Styles (reuses .editing-cell visuals) */
+  #ablation-branch-items {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+  }
+  .ablation-header-row,
+  .ablation-row {
+      display: grid;
+      grid-template-columns: 110px repeat(4, 1fr);
+      gap: 10px;
+      align-items: center;
+  }
+  .ablation-header-row {
+      padding: 8px 14px;
+      background: #f8f9fa;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 13px;
+      color: #333;
+  }
+  .ablation-header-cell {
+      text-align: center;
+  }
+  .ablation-row {
+      padding: 12px 14px;
+      background: rgba(139, 140, 192, 0.08);
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+  .ablation-row-label {
+      text-align: center;
+      font-weight: 600;
+      color: #444;
+      padding: 8px;
+      background: rgba(139, 140, 192, 0.1);
+      border-radius: 6px;
+      text-transform: capitalize;
+      font-size: 13px;
+      word-break: break-word;
+  }
+  @media (max-width: 768px) {
+      .ablation-header-row,
+      .ablation-row {
+          grid-template-columns: 80px repeat(4, 1fr);
+          gap: 6px;
+      }
+      .ablation-row-label {
+          font-size: 11px;
+          padding: 4px;
       }
   }
 
@@ -1201,6 +1266,50 @@
   }
 
   window.addEventListener('DOMContentLoaded', loadEditingComparison);
+
+  // Ablation Branching: per-object row showing input + (w/o branching) spine + (w/) spine.
+  // Files probed under static/images/ablation_branch/{obj}/ with the convention:
+  //   input            → {obj}.png
+  //   w/o branching    → {obj}_ablation_branching_spine.png
+  //   w/ branching     → {obj}_spine.png
+  const ablationBranchObjects = ["hand", "horse", "monstera_tree", "mushroom", "plant5", "threepeople"];
+
+  function loadAblationBranch() {
+      const container = document.getElementById('ablation-branch-items');
+      if (!container) return;
+
+      const headerCells = [
+          `<div class="ablation-header-cell"></div>`,
+          `<div class="ablation-header-cell">Input Mesh</div>`,
+          `<div class="ablation-header-cell">Rib</div>`,
+          `<div class="ablation-header-cell">w/ Branching (Ours)</div>`,
+          `<div class="ablation-header-cell">w/o Branching</div>`
+      ].join('');
+      container.insertAdjacentHTML('beforeend',
+          `<div class="ablation-header-row">${headerCells}</div>`
+      );
+
+      ablationBranchObjects.forEach(obj => {
+          const files = [
+              { src: `${obj}.png`,                              alt: "Input Mesh" },
+              { src: `${obj}_rib.png`,                          alt: "Rib" },
+              { src: `${obj}_spine.png`,                        alt: "w/ Branching (Ours)" },
+              { src: `${obj}_ablation_branching_spine.png`,     alt: "w/o Branching" }
+          ];
+          const cells = files.map(f => `
+            <div class="editing-cell">
+              <img src="static/images/ablation_branch/${obj}/${f.src}" alt="${f.alt}"
+                   onerror="this.parentElement.classList.add('empty'); this.remove();">
+            </div>`).join('');
+          container.insertAdjacentHTML('beforeend',
+              `<div class="ablation-row">
+                <div class="ablation-row-label">${obj.replace(/_/g, ' ')}</div>${cells}
+              </div>`
+          );
+      });
+  }
+
+  window.addEventListener('DOMContentLoaded', loadAblationBranch);
 
   // Auto-populate the top comparison sliders from demo/ folder.
   // For each demoObject, checks whether both {obj}.png and {obj}_fishbone.png exist;
