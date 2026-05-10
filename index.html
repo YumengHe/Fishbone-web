@@ -223,10 +223,45 @@
     </div>
   </section>
 
+  <!-- Ablation: Rib Extraction Design Choices Section -->
+  <section class="section">
+    <div class="container">
+      <h2 class="title is-3" style="text-align:center;">♣️ Ablation: Rib Extraction Design Choices ♣️</h2>
+      <p style="margin-bottom: 1.5rem; text-align: justify;">
+        Seven panels evaluate each component of our rib extraction on the same input mesh.
+        <strong>Input mesh</strong> is the cleaned source.
+        <strong>Ours</strong> runs the full pipeline: heat-method geodesic ribs with automatic root-axis selection and adaptive level count
+        <em>K</em> = clip(round(10 <em>L<sub>p</sub></em> / <em>L<sub>o</sub></em>), 3, 10).
+        The remaining five panels each remove one component:
+        <strong>w/o heat method</strong> replaces the geodesic iso-contours with a fixed stack of axis-aligned planes (grid ribs);
+        <strong>w/o automatic root-axis selection</strong> pins the root face to a global axis instead of the per-part longest-extent axis <em>a*</em>;
+        and the three <strong>w/o adaptive level count</strong> panels run the full pipeline but with a hand-fixed <em>K</em> &isin; {5, 10, 15} for every part.
+        The first two ablations (w/o heat method and w/o automatic root-axis selection) both fail to slice the part along its natural direction:
+        the grid baseline replaces geodesic iso-contours with fixed axis-aligned planes, while the wrong-axis variant runs the heat method but propagates
+        from the wrong end, so the rib stack ends up misaligned with the object's principal axis.
+        The fixed-level-count ablation instead surfaces an over- and under-sampling problem that is most visible on multi-part objects (e.g., the plant in row 4):
+        <em>K</em> = 5 under-resolves large parts (the stem), while <em>K</em> = 10 and <em>K</em> = 15 over-resolve small auxiliary parts (leaves, buds).
+      </p>
+      <div id="ablation-rib-items"></div>
+    </div>
+  </section>
+
+  <!-- Ablation: Score-maximization vs. Midplane Center Section -->
+  <section class="section">
+    <div class="container">
+      <h2 class="title is-3" style="text-align:center;">♣️ Ablation: Score-maximization vs. Midplane Center ♣️</h2>
+      <p style="text-align:center; margin-bottom: 1.5rem;">
+        Comparison between selecting spine points by <strong>score maximization</strong> and our
+        <strong>midplane center</strong> criterion.
+      </p>
+      <div id="ablation-spine-items"></div>
+    </div>
+  </section>
+
   <!-- Ablation: Branching Section -->
   <section class="section">
     <div class="container">
-      <h2 class="title is-3" style="text-align:center;">♣️ Ablation: Branching ♣️</h2>
+      <h2 class="title is-3" style="text-align:center;">♣️ Ablation: Branching Tree Handling ♣️</h2>
       <p style="text-align:center; margin-bottom: 1.5rem;">
         Effect of the branching design on the spine structure. Each row compares the spine
         produced <strong>without branching</strong> against our full method <strong>with branching</strong>.
@@ -250,8 +285,8 @@
         text-align: left;
         margin-top: 2rem;
         margin-bottom: 0.5rem;
-        font-size: 1.5em;
-        font-weight: bold;
+        font-size: 22px;
+        font-weight: 700;
         color: #333;
         border-bottom: 2px solid #ddd;
         padding-bottom: 5px;
@@ -1310,6 +1345,94 @@
   }
 
   window.addEventListener('DOMContentLoaded', loadAblationBranch);
+
+  // Ablation: Rib Extraction Design Choices.
+  // Files probed under static/images/ablation_rib/{obj}/.
+  // TODO: fill in variant filenames once user finalizes the rename scheme.
+  const ablationRibObjects = ["banana", "bear", "right_leg", "plant"];
+  const ablationRibColumns = [
+      { src: "{obj}.png",                    label: "Input Mesh" },
+      { src: "{obj}_rib.png",                label: "Ours" },
+      { src: "{obj}_grid.png",               label: "w/o Heat Method" },
+      { src: "{obj}_ablation_axis_rib.png",  label: "w/o Auto Root-axis" },
+      { src: "{obj}_ablation_K5_rib.png",    label: "w/o adaptive level count (K=5)" },
+      { src: "{obj}_ablation_K10_rib.png",   label: "w/o adaptive level count (K=10)" },
+      { src: "{obj}_ablation_K15_rib.png",   label: "w/o adaptive level count (K=15)" }
+  ];
+
+  function loadAblationRib() {
+      const container = document.getElementById('ablation-rib-items');
+      if (!container || ablationRibColumns.length === 0) return;
+
+      const colCount = ablationRibColumns.length;
+      const headerCells = [
+          `<div class="ablation-header-cell"></div>`,
+          ...ablationRibColumns.map(c => `<div class="ablation-header-cell">${c.label}</div>`)
+      ].join('');
+      container.insertAdjacentHTML('beforeend',
+          `<div class="ablation-header-row" style="grid-template-columns: 110px repeat(${colCount}, 1fr);">${headerCells}</div>`
+      );
+
+      ablationRibObjects.forEach(obj => {
+          const cells = ablationRibColumns.map(c => {
+              const src = c.src.replace(/\{obj\}/g, obj);
+              return `
+                <div class="editing-cell">
+                  <img src="static/images/ablation_rib/${obj}/${src}" alt="${c.label}"
+                       onerror="this.parentElement.classList.add('empty'); this.remove();">
+                </div>`;
+          }).join('');
+          container.insertAdjacentHTML('beforeend',
+              `<div class="ablation-row" style="grid-template-columns: 110px repeat(${colCount}, 1fr);">
+                <div class="ablation-row-label">${obj.replace(/_/g, ' ')}</div>${cells}
+              </div>`
+          );
+      });
+  }
+
+  window.addEventListener('DOMContentLoaded', loadAblationRib);
+
+  // Ablation: Score-maximization vs. Midplane Center.
+  // Files probed under static/images/ablation_spine/{obj}/.
+  const ablationSpineObjects = ["banana", "bird2"];
+  const ablationSpineColumns = [
+      { src: "{obj}.png",        label: "Input Mesh" },
+      { src: "{obj}_rib.png",    label: "Rib" },
+      { src: "{obj}_spine.png",  label: "Ours" },
+      { src: "{obj}_center.png", label: "Center Spine" }
+  ];
+
+  function loadAblationSpine() {
+      const container = document.getElementById('ablation-spine-items');
+      if (!container) return;
+
+      const colCount = ablationSpineColumns.length;
+      const headerCells = [
+          `<div class="ablation-header-cell"></div>`,
+          ...ablationSpineColumns.map(c => `<div class="ablation-header-cell">${c.label}</div>`)
+      ].join('');
+      container.insertAdjacentHTML('beforeend',
+          `<div class="ablation-header-row" style="grid-template-columns: 110px repeat(${colCount}, 1fr);">${headerCells}</div>`
+      );
+
+      ablationSpineObjects.forEach(obj => {
+          const cells = ablationSpineColumns.map(c => {
+              const src = c.src.replace(/\{obj\}/g, obj);
+              return `
+                <div class="editing-cell">
+                  <img src="static/images/ablation_spine/${obj}/${src}" alt="${c.label}"
+                       onerror="this.parentElement.classList.add('empty'); this.remove();">
+                </div>`;
+          }).join('');
+          container.insertAdjacentHTML('beforeend',
+              `<div class="ablation-row" style="grid-template-columns: 110px repeat(${colCount}, 1fr);">
+                <div class="ablation-row-label">${obj.replace(/_/g, ' ')}</div>${cells}
+              </div>`
+          );
+      });
+  }
+
+  window.addEventListener('DOMContentLoaded', loadAblationSpine);
 
   // Auto-populate the top comparison sliders from demo/ folder.
   // For each demoObject, checks whether both {obj}.png and {obj}_fishbone.png exist;
