@@ -223,6 +223,58 @@
     </div>
   </section>
 
+  <!-- Robot Learning via Scene Diversification Section -->
+  <section class="section">
+    <div class="container">
+      <h2 class="title is-3" style="text-align:center;">🤖 Robot Learning via Scene Diversification 🤖</h2>
+      <p style="text-align:center; margin-bottom: 1.5rem;">
+        Policy is trained from Fishbone-generated deformation variants of single objects.
+        We present <strong>single object</strong> scene and <strong>multi object</strong> scene for three objects.
+      </p>
+
+      <div class="robot-grid">
+        <div class="robot-header"></div>
+        <div class="robot-header">Croissant</div>
+        <div class="robot-header">Tuna</div>
+        <div class="robot-header">Cup</div>
+
+        <div class="robot-row-label">Single Object</div>
+        <div class="robot-cell">
+          <video autoplay loop muted playsinline>
+            <source src="static/images/robot/croissant_single_eval_rollout.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="robot-cell">
+          <video autoplay loop muted playsinline>
+            <source src="static/images/robot/tuna_single_eval_rollout.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="robot-cell">
+          <video autoplay loop muted playsinline>
+            <source src="static/images/robot/cup_single_eval_rollout.mp4" type="video/mp4">
+          </video>
+        </div>
+
+        <div class="robot-row-label">Multi Objects</div>
+        <div class="robot-cell">
+          <video autoplay loop muted playsinline>
+            <source src="static/images/robot/croissant_multi_eval_rollout.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="robot-cell">
+          <video autoplay loop muted playsinline>
+            <source src="static/images/robot/tuna_multi_eval_rollout.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="robot-cell">
+          <video autoplay loop muted playsinline>
+            <source src="static/images/robot/cup_multi_eval_rollout.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Ablation: Rib Extraction Design Choices Section -->
   <section class="section">
     <div class="container">
@@ -650,6 +702,61 @@
       .editing-header-row > div:nth-child(n+5) {
           display: none;
       }
+  }
+
+  /* Robot Learning grid: 4-col matrix (label + 3 objects) × 3 rows (header + 2 conditions) */
+  .robot-grid {
+      display: grid;
+      grid-template-columns: 140px repeat(3, 1fr);
+      gap: 12px;
+      align-items: center;
+  }
+  .robot-header {
+      text-align: center;
+      font-weight: 700;
+      font-size: 16px;
+      color: #333;
+      padding: 10px 8px;
+      background: rgba(139, 140, 192, 0.1);
+      border-radius: 6px;
+  }
+  .robot-header:empty {
+      background: transparent;
+  }
+  .robot-row-label {
+      text-align: center;
+      font-weight: 600;
+      color: #444;
+      padding: 10px 8px;
+      background: rgba(139, 140, 192, 0.1);
+      border-radius: 6px;
+      font-size: 14px;
+  }
+  .robot-cell {
+      background: #fff;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      padding: 6px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+  .robot-cell:hover {
+      transform: scale(1.03);
+      box-shadow: 0 4px 10px #b6a9cf;
+  }
+  .robot-cell video {
+      width: 100%;
+      height: auto;
+      border-radius: 4px;
+      display: block;
+  }
+  @media (max-width: 768px) {
+      .robot-grid {
+          grid-template-columns: 90px repeat(3, 1fr);
+          gap: 6px;
+      }
+      .robot-header { font-size: 13px; }
+      .robot-row-label { font-size: 11px; padding: 6px 4px; }
   }
 
   /* Ablation Branching Styles (reuses .editing-cell visuals) */
