@@ -391,24 +391,7 @@
       <p style="text-align:center; margin-bottom: 1.5rem;">
         Comparison of mesh lifting strategies on the same input.
       </p>
-      <div style="display:flex; flex-direction:column; gap:12px;">
-        <div class="ablation-header-row" style="grid-template-columns: repeat(3, 1fr);">
-          <div class="ablation-header-cell">Input Mesh</div>
-          <div class="ablation-header-cell">Cylindrical (Ours)</div>
-          <div class="ablation-header-cell">Displacement</div>
-        </div>
-        <div class="ablation-row" style="grid-template-columns: repeat(3, 1fr);">
-          <div class="editing-cell">
-            <img src="static/images/ablation_cylindrical/bird.png" alt="Input Mesh">
-          </div>
-          <div class="editing-cell">
-            <img src="static/images/ablation_cylindrical/bird_cylindrical.png" alt="Cylindrical (Ours)">
-          </div>
-          <div class="editing-cell">
-            <img src="static/images/ablation_cylindrical/bird_displacement.png" alt="Displacement">
-          </div>
-        </div>
-      </div>
+      <div id="ablation-meshlifting-items"></div>
     </div>
   </section>
 
@@ -1630,6 +1613,46 @@
   }
 
   window.addEventListener('DOMContentLoaded', loadAblationSpine);
+
+  // Ablation: Mesh Lifting. Files under static/images/ablation_meshlifting/{obj}/.
+  const ablationMeshliftingObjects = ["bird", "spot"];
+  const ablationMeshliftingColumns = [
+      { src: "{obj}.png",               label: "Input Mesh" },
+      { src: "{obj}_cylindrical.png",   label: "Cylindrical (Ours)" },
+      { src: "{obj}_displacement.png",  label: "Displacement" }
+  ];
+
+  function loadAblationMeshlifting() {
+      const container = document.getElementById('ablation-meshlifting-items');
+      if (!container) return;
+
+      const colCount = ablationMeshliftingColumns.length;
+      const headerCells = [
+          `<div class="ablation-header-cell"></div>`,
+          ...ablationMeshliftingColumns.map(c => `<div class="ablation-header-cell">${c.label}</div>`)
+      ].join('');
+      container.insertAdjacentHTML('beforeend',
+          `<div class="ablation-header-row" style="grid-template-columns: 110px repeat(${colCount}, 1fr);">${headerCells}</div>`
+      );
+
+      ablationMeshliftingObjects.forEach(obj => {
+          const cells = ablationMeshliftingColumns.map(c => {
+              const src = c.src.replace(/\{obj\}/g, obj);
+              return `
+                <div class="editing-cell">
+                  <img src="static/images/ablation_meshlifting/${obj}/${src}" alt="${c.label}"
+                       onerror="this.parentElement.classList.add('empty'); this.remove();">
+                </div>`;
+          }).join('');
+          container.insertAdjacentHTML('beforeend',
+              `<div class="ablation-row" style="grid-template-columns: 110px repeat(${colCount}, 1fr);">
+                <div class="ablation-row-label">${obj.replace(/_/g, ' ')}</div>${cells}
+              </div>`
+          );
+      });
+  }
+
+  window.addEventListener('DOMContentLoaded', loadAblationMeshlifting);
 
   // Auto-populate the top comparison sliders from demo/ folder.
   // For each demoObject, checks whether both {obj}.png and {obj}_fishbone.png exist;
