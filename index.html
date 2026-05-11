@@ -384,6 +384,34 @@
     </div>
   </section>
 
+  <!-- Ablation: Mesh Lifting Section -->
+  <section class="section">
+    <div class="container">
+      <h2 class="title is-3" style="text-align:center;">♣️ Ablation: Mesh Lifting ♣️</h2>
+      <p style="text-align:center; margin-bottom: 1.5rem;">
+        Comparison of mesh lifting strategies on the same input.
+      </p>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+        <div class="ablation-header-row" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="ablation-header-cell">Input Mesh</div>
+          <div class="ablation-header-cell">Cylindrical (Ours)</div>
+          <div class="ablation-header-cell">Displacement</div>
+        </div>
+        <div class="ablation-row" style="grid-template-columns: repeat(3, 1fr);">
+          <div class="editing-cell">
+            <img src="static/images/ablation_cylindrical/bird.png" alt="Input Mesh">
+          </div>
+          <div class="editing-cell">
+            <img src="static/images/ablation_cylindrical/bird_cylindrical.png" alt="Cylindrical (Ours)">
+          </div>
+          <div class="editing-cell">
+            <img src="static/images/ablation_cylindrical/bird_displacement.png" alt="Displacement">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
 
 
 <style>
@@ -1401,7 +1429,7 @@
   // Editing Comparison: per-object row showing input mesh + (representation, deformation)
   // for Ours / WIR3D / ARAP. Files probed under static/images/comparison_editing/{obj}/.
   // Missing files render as a striped empty cell (same UX as More Demo).
-  const comparisonEditingObjects = ["dragon"];
+  const comparisonEditingObjects = ["chair", "dragon", "nefertiti", "spot"];
   const editingMethods = [
       { key: "fishbone", label: "Ours" },
       { key: "wir3d",    label: "WIR3D" },
@@ -1567,7 +1595,7 @@
   const ablationSpineColumns = [
       { src: "{obj}.png",        label: "Input Mesh" },
       { src: "{obj}_rib.png",    label: "Rib" },
-      { src: "{obj}_spine.png",  label: "Ours" },
+      { src: "{obj}_spine.png",  label: "Score Maximization Spine (Ours)" },
       { src: "{obj}_center.png", label: "Center Spine" }
   ];
 
