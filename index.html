@@ -134,7 +134,7 @@
   <!-- Deformation Modes Section -->
   <section class="section">
     <div class="container">
-      <h2 class="title is-3" style="text-align:center;">🔧 Deformation Modes 🔧</h2>
+      <h2 class="title is-3" style="text-align:center;">🔧 Deformation 🔧</h2>
 
       <h3 class="deformation-subtitle">Rib-driven Deformation</h3>
       <div class="deformation-grid">
@@ -200,6 +200,60 @@
     </div>
   </section>
 
+  <!-- Dynamics Section -->
+  <section class="section">
+    <div class="container">
+      <h2 class="title is-3" style="text-align:center;">⚙️ Dynamics ⚙️</h2>
+      <div class="deformation-grid">
+        <div class="deformation-item">
+          <video autoplay loop muted playsinline>
+            <source src="static/images/dynamics_animation/mushroom_dynamics.mp4" type="video/mp4">
+          </video>
+          <h4>Mushroom</h4>
+        </div>
+        <div class="deformation-item">
+          <video autoplay loop muted playsinline>
+            <source src="static/images/dynamics_animation/plant2_dynamics.mp4" type="video/mp4">
+          </video>
+          <h4>Plant</h4>
+        </div>
+        <div class="deformation-item">
+          <video autoplay loop muted playsinline>
+            <source src="static/images/dynamics_animation/tuna_dynamics.mp4" type="video/mp4">
+          </video>
+          <h4>Tuna</h4>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Animation Section -->
+  <section class="section">
+    <div class="container">
+      <h2 class="title is-3" style="text-align:center;">🎞️ Animation 🎞️</h2>
+      <div class="deformation-grid">
+        <div class="deformation-item">
+          <video autoplay loop muted playsinline>
+            <source src="static/images/dynamics_animation/cat2_animation.mp4" type="video/mp4">
+          </video>
+          <h4>Cat</h4>
+        </div>
+        <div class="deformation-item">
+          <video autoplay loop muted playsinline>
+            <source src="static/images/dynamics_animation/rose_animation.mp4" type="video/mp4">
+          </video>
+          <h4>Rose</h4>
+        </div>
+        <div class="deformation-item">
+          <video autoplay loop muted playsinline>
+            <source src="static/images/dynamics_animation/teletubbies_animation.mp4" type="video/mp4">
+          </video>
+          <h4>Teletubbies</h4>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Gallery Section -->
   <section class="section">
     <div class="container">
@@ -208,6 +262,21 @@
         <div id="with-video-section">
             <div id="video-items"></div>
         </div>
+    </div>
+  </section>
+
+  <!-- Editing GUI Section -->
+  <section class="section">
+    <div class="container">
+      <h2 class="title is-3" style="text-align:center;">🖥️ Editing GUI 🖥️</h2>
+      <p style="text-align:center; margin-bottom: 1.5rem;">
+        An interactive editor lets users sculpt deformations directly on the Fishbone
+        representation.
+      </p>
+      <figure style="text-align:center;">
+        <img src="static/images/GUI/image.png" alt="Editing GUI"
+             style="max-width:100%; height:auto; border-radius:8px; box-shadow:0 2px 8px rgba(0,0,0,0.12);">
+      </figure>
     </div>
   </section>
 
@@ -280,19 +349,13 @@
     <div class="container">
       <h2 class="title is-3" style="text-align:center;">♣️ Ablation: Rib Extraction Design Choices ♣️</h2>
       <p style="margin-bottom: 1.5rem; text-align: justify;">
-        Seven panels evaluate each component of our rib extraction on the same input mesh.
-        <strong>Input mesh</strong> is the cleaned source.
-        <strong>Ours</strong> runs the full pipeline: heat-method geodesic ribs with automatic root-axis selection and adaptive level count
+        Each panel ablates one component of our rib extraction. <strong>Ours</strong> uses heat-method
+        geodesic ribs with automatic root-axis selection and adaptive level count
         <em>K</em> = clip(round(10 <em>L<sub>p</sub></em> / <em>L<sub>o</sub></em>), 3, 10).
-        The remaining five panels each remove one component:
-        <strong>w/o heat method</strong> replaces the geodesic iso-contours with a fixed stack of axis-aligned planes (grid ribs);
-        <strong>w/o automatic root-axis selection</strong> pins the root face to a global axis instead of the per-part longest-extent axis <em>a*</em>;
-        and the three <strong>w/o adaptive level count</strong> panels run the full pipeline but with a hand-fixed <em>K</em> &isin; {5, 10, 15} for every part.
-        The first two ablations (w/o heat method and w/o automatic root-axis selection) both fail to slice the part along its natural direction:
-        the grid baseline replaces geodesic iso-contours with fixed axis-aligned planes, while the wrong-axis variant runs the heat method but propagates
-        from the wrong end, so the rib stack ends up misaligned with the object's principal axis.
-        The fixed-level-count ablation instead surfaces an over- and under-sampling problem that is most visible on multi-part objects (e.g., the plant in row 4):
-        <em>K</em> = 5 under-resolves large parts (the stem), while <em>K</em> = 10 and <em>K</em> = 15 over-resolve small auxiliary parts (leaves, buds).
+        Removing the <strong>heat method</strong> (grid ribs) or <strong>auto root-axis selection</strong>
+        misaligns the rib stack with the object's principal axis. Fixed-<em>K</em> variants instead
+        over- or under-sample multi-part objects: <em>K</em>=5 under-resolves large parts (e.g., the
+        plant stem in row 4), while <em>K</em>=10 and 15 over-resolve small parts (leaves, buds).
       </p>
       <div id="ablation-rib-items"></div>
     </div>
