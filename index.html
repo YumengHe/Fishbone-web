@@ -279,6 +279,82 @@
     </div>
   </section>
 
+  <!-- 3D Shape Generation Section -->
+  <section class="section">
+    <div class="container">
+      <h2 class="title is-3" style="text-align:center;">🧊 3D Shape Generation 🧊</h2>
+      <p style="text-align:center; margin-bottom: 1.5rem;">
+        Generated 3D shapes compared against ground truth and <strong>PartCrafter</strong>. Each row shows
+        the input, ground-truth mesh / rib / spine, the PartCrafter output, and our generated mesh / rib / spine.
+      </p>
+      <div id="shape-generation-items"></div>
+    </div>
+  </section>
+
+  <!-- Editing Comparison Section -->
+  <section class="section">
+    <div class="container">
+      <h2 class="title is-3" style="text-align:center;">♠️ Editing Comparison ♠️</h2>
+      <p style="text-align:center; margin-bottom: 1.5rem;">
+        Editing comparison across <strong>Ours</strong>, <strong>WIR3D</strong>, and <strong>ARAP</strong>.
+        For each method we show its representation and the resulting deformation; the leftmost column is the input mesh.
+      </p>
+      <div id="editing-comparison-items"></div>
+    </div>
+  </section>
+
+  <!-- Robot Learning via Scene Diversification Section -->
+  <section class="section">
+    <div class="container">
+      <h2 class="title is-3" style="text-align:center;">🤖 Robot Learning via Data Diversification 🤖</h2>
+      <p style="text-align:center; margin-bottom: 1.5rem;">
+        Policy is trained from Fishbone-generated deformation variants of single objects.
+        We present <strong>single object</strong> scene and <strong>multi object</strong> scene for three objects.
+      </p>
+
+      <div class="robot-grid">
+        <div class="robot-header"></div>
+        <div class="robot-header">Croissant</div>
+        <div class="robot-header">Tuna</div>
+        <div class="robot-header">Cup</div>
+
+        <div class="robot-row-label">Single Object</div>
+        <div class="robot-cell">
+          <video autoplay loop muted playsinline>
+            <source src="static/images/robot/croissant_single_eval_rollout.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="robot-cell">
+          <video autoplay loop muted playsinline>
+            <source src="static/images/robot/tuna_single_eval_rollout.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="robot-cell">
+          <video autoplay loop muted playsinline>
+            <source src="static/images/robot/cup_single_eval_rollout.mp4" type="video/mp4">
+          </video>
+        </div>
+
+        <div class="robot-row-label">Multi Objects</div>
+        <div class="robot-cell">
+          <video autoplay loop muted playsinline>
+            <source src="static/images/robot/croissant_multi_eval_rollout.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="robot-cell">
+          <video autoplay loop muted playsinline>
+            <source src="static/images/robot/tuna_multi_eval_rollout.mp4" type="video/mp4">
+          </video>
+        </div>
+        <div class="robot-cell">
+          <video autoplay loop muted playsinline>
+            <source src="static/images/robot/cup_multi_eval_rollout.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Agent Section -->
   <section class="section">
     <div class="container">
@@ -354,70 +430,6 @@
         <div class="agent-turn agent-done">
           <span class="agent-role">done</span>
           <div class="agent-content">Made all four legs thicker by uniformly scaling the leg ribs outward.</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Editing Comparison Section -->
-  <section class="section">
-    <div class="container">
-      <h2 class="title is-3" style="text-align:center;">♠️ Editing Comparison ♠️</h2>
-      <p style="text-align:center; margin-bottom: 1.5rem;">
-        Editing comparison across <strong>Ours</strong>, <strong>WIR3D</strong>, and <strong>ARAP</strong>.
-        For each method we show its representation and the resulting deformation; the leftmost column is the input mesh.
-      </p>
-      <div id="editing-comparison-items"></div>
-    </div>
-  </section>
-
-  <!-- Robot Learning via Scene Diversification Section -->
-  <section class="section">
-    <div class="container">
-      <h2 class="title is-3" style="text-align:center;">🤖 Robot Learning via Data Diversification 🤖</h2>
-      <p style="text-align:center; margin-bottom: 1.5rem;">
-        Policy is trained from Fishbone-generated deformation variants of single objects.
-        We present <strong>single object</strong> scene and <strong>multi object</strong> scene for three objects.
-      </p>
-
-      <div class="robot-grid">
-        <div class="robot-header"></div>
-        <div class="robot-header">Croissant</div>
-        <div class="robot-header">Tuna</div>
-        <div class="robot-header">Cup</div>
-
-        <div class="robot-row-label">Single Object</div>
-        <div class="robot-cell">
-          <video autoplay loop muted playsinline>
-            <source src="static/images/robot/croissant_single_eval_rollout.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="robot-cell">
-          <video autoplay loop muted playsinline>
-            <source src="static/images/robot/tuna_single_eval_rollout.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="robot-cell">
-          <video autoplay loop muted playsinline>
-            <source src="static/images/robot/cup_single_eval_rollout.mp4" type="video/mp4">
-          </video>
-        </div>
-
-        <div class="robot-row-label">Multi Objects</div>
-        <div class="robot-cell">
-          <video autoplay loop muted playsinline>
-            <source src="static/images/robot/croissant_multi_eval_rollout.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="robot-cell">
-          <video autoplay loop muted playsinline>
-            <source src="static/images/robot/tuna_multi_eval_rollout.mp4" type="video/mp4">
-          </video>
-        </div>
-        <div class="robot-cell">
-          <video autoplay loop muted playsinline>
-            <source src="static/images/robot/cup_multi_eval_rollout.mp4" type="video/mp4">
-          </video>
         </div>
       </div>
     </div>
@@ -1844,6 +1856,67 @@
   }
 
   window.addEventListener('DOMContentLoaded', loadAblationMeshlifting);
+
+  // 3D Shape Generation: 16 shape folders × 8 image columns per manifest.txt.
+  // Files under static/images/3Dshape_generation/{folder}/{col}.png.
+  const shapeGenFolders = [
+      "dit_last_v8c_aronly_000ab8f3_4parts_view_00_az000",
+      "dit_last_v8c_aronly_000bb354_3parts_view_03_az090",
+      "dit_last_v8c_aronly_000c8272_4parts_view_02_az060",
+      "dit_last_v8c_aronly_000e4ba3_7parts_view_08_az240",
+      "dit_last_v8c_aronly_000f4ec7_8parts_view_01_az030",
+      "dit_last_v8c_aronly_0005bedb_8parts_view_09_az270",
+      "dit_last_v8c_aronly_0014b1af_14parts_view_09_az270",
+      "dit_last_v8c_aronly_0014c111_7parts_view_04_az120",
+      "dit_last_v8c_aronly_00057aef_7parts_view_11_az330",
+      "dit_last_v8c_aronly_001318af_16parts_view_00_az000",
+      "dit_last_v8c_aronly_001354e5_7parts_view_05_az150",
+      "dit_last_v8c_aronly_00079311_2parts_view_04_az120",
+      "dit_last_v8c_aronly_00089638_16parts_view_06_az180",
+      "dit_last_v8c_aronly_000faf5e_7parts_view_03_az090",
+      "dit_last_v8c_aronly_0000c32f_10parts_view_06_az180",
+      "dit_last_v8c_aronly_000b76f2_10parts_view_04_az120"
+  ];
+  const shapeGenColumns = [
+      { file: "input.png",      label: "Input" },
+      { file: "gt.png",         label: "GT" },
+      { file: "gt_rib.png",     label: "GT Rib" },
+      { file: "gt_spine.png",   label: "GT Spine" },
+      { file: "baseline.png",   label: "PartCrafter" },
+      { file: "ours_mesh.png",  label: "Ours (Mesh)" },
+      { file: "ours_rib.png",   label: "Ours (Rib)" },
+      { file: "ours_spine.png", label: "Ours (Spine)" }
+  ];
+
+  function loadShapeGeneration() {
+      const container = document.getElementById('shape-generation-items');
+      if (!container) return;
+
+      const colCount = shapeGenColumns.length;
+      const headerCells = [
+          `<div class="ablation-header-cell"></div>`,
+          ...shapeGenColumns.map(c => `<div class="ablation-header-cell">${c.label}</div>`)
+      ].join('');
+      container.insertAdjacentHTML('beforeend',
+          `<div class="ablation-header-row" style="grid-template-columns: 50px repeat(${colCount}, 1fr);">${headerCells}</div>`
+      );
+
+      shapeGenFolders.forEach((folder, i) => {
+          const cells = shapeGenColumns.map(c => `
+            <div class="editing-cell">
+              <img src="static/images/3Dshape_generation/${folder}/${c.file}" alt="${c.label}"
+                   onerror="this.parentElement.classList.add('empty'); this.remove();">
+            </div>`).join('');
+          const idx = String(i + 1).padStart(2, '0');
+          container.insertAdjacentHTML('beforeend',
+              `<div class="ablation-row" style="grid-template-columns: 50px repeat(${colCount}, 1fr);">
+                <div class="ablation-row-label">${idx}</div>${cells}
+              </div>`
+          );
+      });
+  }
+
+  window.addEventListener('DOMContentLoaded', loadShapeGeneration);
 
   // Auto-populate the top comparison sliders from demo/ folder.
   // For each demoObject, checks whether both {obj}.png and {obj}_fishbone.png exist;
