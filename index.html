@@ -279,6 +279,86 @@
     </div>
   </section>
 
+  <!-- Agent Section -->
+  <section class="section">
+    <div class="container">
+      <h2 class="title is-3" style="text-align:center;">💬 Agent 💬</h2>
+      <p style="text-align:center; margin-bottom: 1.5rem;">
+        A VLM agent drives the editing GUI through tool calls — listing ribs, selecting them, and
+        applying deformations on behalf of the user.
+      </p>
+
+      <div class="agent-transcript">
+        <div class="agent-turn agent-user">
+          <span class="agent-role">user</span>
+          <div class="agent-content">make the four legs thicker</div>
+        </div>
+
+        <div class="agent-turn agent-meta">
+          <span class="agent-role">active part</span>
+          <div class="agent-content"><code>{"type":"active_part","part":"geometry_0"}</code></div>
+        </div>
+
+        <div class="agent-turn agent-tool-call">
+          <span class="agent-role">tool call</span>
+          <div class="agent-content"><code>list_ribs({})</code></div>
+        </div>
+        <div class="agent-turn agent-tool-result">
+          <span class="agent-role">tool result</span>
+          <div class="agent-content">
+            <code>list_ribs:</code> Available ribs on part <code>'geometry_0'</code>:
+            <code>['r1', 'r2', 'r3', 'r4-1', 'r4-2', 'r4-3', 'r5-1', 'r5-2', 'r5-3', 'r6', 'r7', 'r8-1', 'r8-2', 'r8-3', 'r9-1', 'r9-2', 'r9-3', 'r10']</code>
+            <div class="agent-hint">(Names are labelled in the screenshot. Lower indices are usually closer to the part's starting end.)</div>
+            <img class="agent-screenshot" src="static/images/agent/image1.png" alt="list_ribs screenshot" title="Click to enlarge">
+          </div>
+        </div>
+
+        <div class="agent-turn agent-tool-call">
+          <span class="agent-role">tool call</span>
+          <div class="agent-content"><code>select_ribs({"ribs":["r4-2","r5-2","r4-3","r5-3","r8-2","r9-2","r8-3","r9-3"]})</code></div>
+        </div>
+        <div class="agent-turn agent-tool-result">
+          <span class="agent-role">tool result</span>
+          <div class="agent-content">
+            <code>select_ribs:</code> Selected 8 rib(s): <code>['r4-2', 'r5-2', 'r4-3', 'r5-3', 'r8-2', 'r9-2', 'r8-3', 'r9-3']</code>
+            <img class="agent-screenshot" src="static/images/agent/image2.png" alt="select_ribs screenshot" title="Click to enlarge">
+          </div>
+        </div>
+
+        <div class="agent-turn agent-tool-call">
+          <span class="agent-role">tool call</span>
+          <div class="agent-content"><code>deform({"mode":1,"params":{"uniform_scale":1.35}})</code></div>
+        </div>
+        <div class="agent-turn agent-tool-result">
+          <span class="agent-role">tool result</span>
+          <div class="agent-content">
+            <code>deform:</code> Applied mode 1 (uniform_scale) with params <code>{'uniform_scale': 1.35}</code> to 8 rib(s).
+            <img class="agent-screenshot" src="static/images/agent/image3.png" alt="deform screenshot" title="Click to enlarge">
+          </div>
+        </div>
+
+        <div class="agent-turn agent-eval">
+          <span class="agent-role">evaluation</span>
+          <div class="agent-content">✓ APPROVED — The four legs are visibly thicker with smooth geometry and a reasonable magnitude change.</div>
+        </div>
+
+        <div class="agent-turn agent-tool-call">
+          <span class="agent-role">tool call</span>
+          <div class="agent-content"><code>done({"message":"Made all four legs thicker by uniformly scaling the leg ribs outward."})</code></div>
+        </div>
+        <div class="agent-turn agent-tool-result">
+          <span class="agent-role">tool result</span>
+          <div class="agent-content"><code>done:</code> Made all four legs thicker by uniformly scaling the leg ribs outward.</div>
+        </div>
+
+        <div class="agent-turn agent-done">
+          <span class="agent-role">done</span>
+          <div class="agent-content">Made all four legs thicker by uniformly scaling the leg ribs outward.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Editing Comparison Section -->
   <section class="section">
     <div class="container">
@@ -294,7 +374,7 @@
   <!-- Robot Learning via Scene Diversification Section -->
   <section class="section">
     <div class="container">
-      <h2 class="title is-3" style="text-align:center;">🤖 Robot Learning via Scene Diversification 🤖</h2>
+      <h2 class="title is-3" style="text-align:center;">🤖 Robot Learning via Data Diversification 🤖</h2>
       <p style="text-align:center; margin-bottom: 1.5rem;">
         Policy is trained from Fishbone-generated deformation variants of single objects.
         We present <strong>single object</strong> scene and <strong>multi object</strong> scene for three objects.
@@ -775,6 +855,117 @@
       .editing-header-row > div:nth-child(n+5) {
           display: none;
       }
+  }
+
+  /* Agent transcript */
+  .agent-transcript {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+  }
+  .agent-turn {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: 12px;
+      align-items: start;
+      padding: 10px 14px;
+      border-radius: 8px;
+      background: #fafbfc;
+      border: 1px solid #eef0f2;
+  }
+  .agent-role {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 4px 8px;
+      border-radius: 4px;
+      text-align: center;
+      align-self: start;
+      white-space: nowrap;
+  }
+  .agent-content {
+      font-size: 13px;
+      line-height: 1.55;
+      color: #2c3e50;
+      word-break: break-word;
+  }
+  .agent-content code {
+      font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+      font-size: 12px;
+      background: rgba(0,0,0,0.04);
+      padding: 1px 5px;
+      border-radius: 3px;
+      color: #4e659d;
+  }
+  .agent-hint {
+      margin-top: 4px;
+      font-size: 11px;
+      color: #888;
+  }
+  .agent-screenshot {
+      display: block;
+      margin-top: 8px;
+      max-width: 240px;
+      width: 100%;
+      height: auto;
+      border-radius: 6px;
+      border: 1px solid rgba(0,0,0,0.1);
+      cursor: zoom-in;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .agent-screenshot:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  }
+
+  /* Lightbox overlay (full-viewport, click-outside-to-close) */
+  .lightbox-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4vh 4vw;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease;
+      z-index: 9999;
+      cursor: zoom-out;
+  }
+  .lightbox-overlay.open {
+      opacity: 1;
+      pointer-events: auto;
+  }
+  .lightbox-image {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      border-radius: 6px;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+      cursor: default;
+  }
+  .agent-user                    { background: #eef4ff; border-color: #d6e2ff; }
+  .agent-user .agent-role        { background: #4e659d; color: #fff; }
+  .agent-meta                    { background: #f4f4f4; border-color: #e0e0e0; }
+  .agent-meta .agent-role        { background: #9aa0a6; color: #fff; }
+  .agent-tool-call               { background: #fff7e6; border-color: #ffe3a3; }
+  .agent-tool-call .agent-role   { background: #d97706; color: #fff; }
+  .agent-tool-result             { background: #ecf8ef; border-color: #c8e6c9; }
+  .agent-tool-result .agent-role { background: #2e7d32; color: #fff; }
+  .agent-eval                    { background: #f3eaff; border-color: #d6c2f5; }
+  .agent-eval .agent-role        { background: #6a3eb5; color: #fff; }
+  .agent-done                    { background: #d4f3d4; border-color: #93d093; font-weight: 600; }
+  .agent-done .agent-role        { background: #1b5e20; color: #fff; }
+  @media (max-width: 768px) {
+      .agent-turn {
+          grid-template-columns: 1fr;
+          gap: 4px;
+      }
+      .agent-role { justify-self: start; }
   }
 
   /* Robot Learning grid: 4-col matrix (label + 3 objects) × 3 rows (header + 2 conditions) */
@@ -1874,6 +2065,38 @@
   }
 
   window.addEventListener('DOMContentLoaded', ensureVideoPlayback);
+
+  // Lightbox: click .agent-screenshot to enlarge; click overlay or press Esc to close.
+  function setupLightbox() {
+      const overlay = document.createElement('div');
+      overlay.className = 'lightbox-overlay';
+      overlay.innerHTML = '<img class="lightbox-image" alt="">';
+      document.body.appendChild(overlay);
+      const imgEl = overlay.querySelector('.lightbox-image');
+
+      function open(src, alt) {
+          imgEl.src = src;
+          imgEl.alt = alt || '';
+          overlay.classList.add('open');
+          document.body.style.overflow = 'hidden';
+      }
+      function close() {
+          overlay.classList.remove('open');
+          document.body.style.overflow = '';
+          // Clear src after transition so it doesn't flash on next open
+          setTimeout(() => { if (!overlay.classList.contains('open')) imgEl.src = ''; }, 200);
+      }
+
+      // Click outside the image closes; clicks on the image itself do not bubble out.
+      overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+      imgEl.addEventListener('click', e => e.stopPropagation());
+      document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+
+      document.querySelectorAll('.agent-screenshot').forEach(img => {
+          img.addEventListener('click', () => open(img.src, img.alt));
+      });
+  }
+  window.addEventListener('DOMContentLoaded', setupLightbox);
 </script>
 </body>
 </html>
