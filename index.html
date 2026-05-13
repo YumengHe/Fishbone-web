@@ -1547,6 +1547,13 @@
 </style>
 
 <script>
+  // Strip trailing digits and replace underscores so folder keys like "bread11" or
+  // "monstera_tree" become "bread" / "monstera tree" for display. CSS capitalizes the
+  // first letter via text-transform on the label classes.
+  function prettyLabel(obj) {
+      return obj.replace(/\d+$/, '').replace(/_/g, ' ');
+  }
+
   const demoObjects = [
     "anglerfish", "banana", "bird2", "bread11", "bread6", "cat2",
     "deer2", "donut2", "dragon", "hand", "horse", "koifish", "nefertiti", "plant2", "plant5",
@@ -1601,7 +1608,7 @@
                            onerror="handleDemoImageError(this)">
                   </div>`;
               }).join('');
-              row.innerHTML = `<div class="demo-row-label">${obj}</div>${cells}`;
+              row.innerHTML = `<div class="demo-row-label">${prettyLabel(obj)}</div>${cells}`;
               container.appendChild(row);
           });
 
@@ -1677,7 +1684,7 @@
           });
           container.insertAdjacentHTML('beforeend',
               `<div class="editing-row">
-                <div class="editing-row-label">${obj}</div>${cells.join('')}
+                <div class="editing-row-label">${prettyLabel(obj)}</div>${cells.join('')}
               </div>`
           );
       });
@@ -1721,7 +1728,7 @@
             </div>`).join('');
           container.insertAdjacentHTML('beforeend',
               `<div class="ablation-row">
-                <div class="ablation-row-label">${obj.replace(/_/g, ' ')}</div>${cells}
+                <div class="ablation-row-label">${prettyLabel(obj)}</div>${cells}
               </div>`
           );
       });
@@ -1767,7 +1774,7 @@
           }).join('');
           container.insertAdjacentHTML('beforeend',
               `<div class="ablation-row" style="grid-template-columns: 110px repeat(${colCount}, 1fr);">
-                <div class="ablation-row-label">${obj.replace(/_/g, ' ')}</div>${cells}
+                <div class="ablation-row-label">${prettyLabel(obj)}</div>${cells}
               </div>`
           );
       });
@@ -1809,7 +1816,7 @@
           }).join('');
           container.insertAdjacentHTML('beforeend',
               `<div class="ablation-row" style="grid-template-columns: 110px repeat(${colCount}, 1fr);">
-                <div class="ablation-row-label">${obj.replace(/_/g, ' ')}</div>${cells}
+                <div class="ablation-row-label">${prettyLabel(obj)}</div>${cells}
               </div>`
           );
       });
@@ -1849,7 +1856,7 @@
           }).join('');
           container.insertAdjacentHTML('beforeend',
               `<div class="ablation-row" style="grid-template-columns: 110px repeat(${colCount}, 1fr);">
-                <div class="ablation-row-label">${obj.replace(/_/g, ' ')}</div>${cells}
+                <div class="ablation-row-label">${prettyLabel(obj)}</div>${cells}
               </div>`
           );
       });
